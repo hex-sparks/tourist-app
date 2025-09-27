@@ -178,13 +178,13 @@
         }
 
         function handleStateClick(state) {
-            if (state.name === "Tamil Nadu") {
-                // Redirect to the tourist places page for Coimbatore
-                window.location.href = `tourist-places.html?state=Tamil%20Nadu&city=Coimbatore`;
-            } else {
-                alert(`Tourism data for ${state.name} is coming soon!`);
-            }
-        }
+    if (state.name === "Tamil Nadu") {
+        // Redirect to the districts page for the selected state
+        window.location.href = `districts.html?state=${encodeURIComponent(state.name)}`;
+    } else {
+        alert(`Tourism data for ${state.name} is coming soon!`);
+    }
+}
 
         function handleLogout() {
             localStorage.removeItem('userEmail');
