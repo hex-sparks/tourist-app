@@ -7,346 +7,308 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50" onload="initializePage()">
-    
-    <header class="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-28 sm:h-20 flex-wrap py-2">
-                <div class="flex items-center space-x-3 mb-2 sm:mb-0">
-                    <button
-                        onclick="goBack()"
-                        class="text-gray-600 hover:text-gray-900 bg-transparent px-2 py-1 rounded-md text-sm transition-colors duration-200"
-                    >
-                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                        </svg>
-                        Back to Map
-                    </button>
-                    <div class="h-6 w-px bg-gray-300"></div>
-                    <h1 class="text-xl font-bold text-gray-900" id="pageTitle">Tourism</h1>
-                </div>
 
-                <div class="flex flex-wrap items-center space-x-2 sm:space-x-4 mb-2 sm:mb-0" id="districtFilter">
-                    </div>
-                <div class="flex items-center space-x-4 ml-auto sm:ml-0">
-                    <div class="flex items-center space-x-2 text-sm text-gray-600 hidden md:flex">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
-                        <span id="userEmail"></span>
-                    </div>
-                    <button
-                        onclick="handleLogout()"
-                        class="text-gray-600 hover:text-gray-900 bg-transparent border border-gray-300 px-3 py-1 rounded-md text-sm transition-colors duration-200"
-                    >
-                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                        </svg>
-                        Logout
-                    </button>
+<header class="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-3">
+                <button
+                    onclick="goBack()"
+                    class="text-gray-600 hover:text-gray-900 bg-transparent px-2 py-1 rounded-md text-sm transition-colors duration-200"
+                >
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to Districts
+                </button>
+                <div class="h-6 w-px bg-gray-300"></div>
+                <h1 class="text-xl font-bold text-gray-900" id="pageTitle">Tourism</h1>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <span id="userEmail"></span>
                 </div>
+                <button
+                    onclick="handleLogout()"
+                    class="text-gray-600 hover:text-gray-900 bg-transparent border border-gray-300 px-3 py-1 rounded-md text-sm transition-colors duration-200"
+                >
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    Logout
+                </button>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-2" id="mainTitle">Explore Region</h2>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto" id="mainDescription">
-                Tourist attractions in **Tamil Nadu**, categorized for easy planning.
-            </p>
-        </div>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2" id="mainTitle">Popular Tourist Places</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto" id="mainDescription">
+            Discover amazing tourist attractions categorized for easy planning.
+        </p>
+    </div>
 
-        <div class="flex flex-wrap justify-center gap-3 mb-8" id="categoryFilter">
-        </div>
+    <div class="flex flex-wrap justify-center gap-3 mb-8" id="categoryFilter">
+    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="placesGrid">
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="placesGrid">
+    </div>
 
-        <div class="mt-12 text-center">
-            <p class="text-gray-500 mb-4">Click the 'Back to Map' button to explore other regions.</p>
-        </div>
-    </main>
+    <div class="mt-12 text-center">
+        <p class="text-gray-500 mb-4">Click the 'Back to Districts' button to explore other districts.</p>
+    </div>
+</main>
 
-    <script>
-        // Consolidated Data Structure
-        const touristData = {
-            "Tamil Nadu": {
-                "Chennai": {
-                    icon: "🏛️",
-                    places: {
-                        "Beaches": [
-                            { name: "Marina Beach", description: "Longest urban beach in India.", icon: "🏖️" }
-                        ],
-                        "Historical Sites": [
-                            { name: "Fort St. George", description: "Historic fort and museum.", icon: "🏰" }
-                        ],
-                        "Temples": [
-                            { name: "Kapaleeshwarar Temple", description: "Iconic Dravidian architecture.", icon: "🕉️" }
-                        ],
-                        "Churches": [
-                            { name: "San Thome Basilica", description: "Roman Catholic Basilica built over St. Thomas’ tomb.", icon: "⛪" }
-                        ],
-                        "Parks": [
-                            { name: "Guindy National Park", description: "Urban wildlife park.", icon: "🦌" }
-                        ]
-                    }
-                },
-                "Ooty": {
-                    icon: "⛰️",
-                    places: {
-                        "Gardens": [
-                            { name: "Ooty Botanical Garden", description: "Exotic plants and flowers.", icon: "🌸" },
-                            { name: "Rose Garden", description: "Famous for thousands of rose varieties.", icon: "🌹" }
-                        ],
-                        "Lakes": [
-                            { name: "Ooty Lake", description: "Boating and scenic views.", icon: "🌊" }
-                        ],
-                        "Peaks": [
-                            { name: "Doddabetta Peak", description: "Highest point in the Nilgiris.", icon: "⛰️" }
-                        ],
-                        "Railways": [
-                            { name: "Nilgiri Mountain Railway", description: "UNESCO World Heritage toy train ride.", icon: "🚂" }
-                        ]
-                    }
-                },
-                "Kodaikanal": {
-                    icon: "🌲",
-                    places: {
-                        "Lakes": [
-                            { name: "Kodaikanal Lake", description: "Boating and cycling.", icon: "🌊" }
-                        ],
-                        "Viewpoints": [
-                            { name: "Coaker’s Walk", description: "Scenic walkway with panoramic views.", icon: "🔭" },
-                            { name: "Pillar Rocks", description: "Giant rock formations.", icon: "🗿" }
-                        ],
-                        "Parks/Gardens": [
-                            { name: "Bryant Park", description: "Flower gardens.", icon: "🌼" }
-                        ],
-                        "Waterfalls": [
-                            { name: "Silver Cascade Falls", description: "Beautiful waterfall on the way from Kodaikanal town.", icon: "🏞️" }
-                        ]
-                    }
-                },
-                "Rameswaram": {
-                    icon: "🌉",
-                    places: {
-                        "Temples": [
-                            { name: "Ramanathaswamy Temple", description: "Famous for its long corridors and religious significance.", icon: "🕉️" }
-                        ],
-                        "Holy Sites": [
-                            { name: "Agni Theertham", description: "Holy water bathing site.", icon: "🙏" }
-                        ],
-                        "Landmarks": [
-                            { name: "Pamban Bridge", description: "Iconic railway bridge connecting Rameswaram to mainland India.", icon: "🌉" }
-                        ],
-                        "Beaches/Ruins": [
-                            { name: "Dhanushkodi", description: "Ruins and scenic beach.", icon: "🏖️" }
-                        ],
-                        "Hills": [
-                            { name: "Gandhamadhana Parvatham", description: "Hill with panoramic views of the town and sea.", icon: "🌄" }
-                        ]
-                    }
-                },
-                "Kanyakumari": {
-                    icon: "🌅",
-                    places: {
-                        "Memorials": [
-                            { name: "Vivekananda Rock Memorial", description: "Statue and meditation center on a rock island.", icon: "🧘" },
-                            { name: "Thiruvalluvar Statue", description: "Monument of the Tamil poet.", icon: "🗿" }
-                        ],
-                        "Beaches": [
-                            { name: "Kanyakumari Beach", description: "Famous for sunrise and sunset views.", icon: "🌅" },
-                            { name: "Sunset Point", description: "Best view of the meeting point of three oceans.", icon: "🌇" }
-                        ],
-                        "Palaces": [
-                            { name: "Padmanabhapuram Palace", description: "Historic palace nearby.", icon: "👑" }
-                        ]
-                    }
-                },
-                "Palani": {
-                    icon: "🛕",
-                    places: {
-                        "Temples": [
-                            { name: "Palani Murugan Temple", description: "Famous hill temple dedicated to Lord Murugan.", icon: "🛕" }
-                        ],
-                        "Dams/Reservoirs": [
-                            { name: "Shanmuganathi Dam", description: "Nearby scenic dam area.", icon: "💧" },
-                            { name: "Azhiyar Reservoir", description: "Natural scenic spot nearby.", icon: "💧" }
-                        ],
-                        "Waterfalls": [
-                            { name: "Palaruvi Waterfalls", description: "Short trek to nearby waterfalls.", icon: "🏞️" }
-                        ]
-                    }
+<script>
+    // Consolidated Data Structure
+    const touristData = {
+        "Tamil Nadu": {
+            "Chennai": {
+                icon: "🏛️",
+                places: {
+                    "Beaches": [
+                        { name: "Marina Beach", description: "Longest urban beach in India.", icon: "🏖️" }
+                    ],
+                    "Historical Sites": [
+                        { name: "Fort St. George", description: "Historic fort and museum.", icon: "🏰" }
+                    ],
+                    "Temples": [
+                        { name: "Kapaleeshwarar Temple", description: "Iconic Dravidian architecture.", icon: "🕉️" }
+                    ],
+                    "Churches": [
+                        { name: "San Thome Basilica", description: "Roman Catholic Basilica built over St. Thomas' tomb.", icon: "⛪" }
+                    ],
+                    "Parks": [
+                        { name: "Guindy National Park", description: "Urban wildlife park.", icon: "🦌" }
+                    ]
+                }
+            },
+            "Ooty": {
+                icon: "⛰️",
+                places: {
+                    "Gardens": [
+                        { name: "Ooty Botanical Garden", description: "Exotic plants and flowers.", icon: "🌸" },
+                        { name: "Rose Garden", description: "Famous for thousands of rose varieties.", icon: "🌹" }
+                    ],
+                    "Lakes": [
+                        { name: "Ooty Lake", description: "Boating and scenic views.", icon: "🌊" }
+                    ],
+                    "Peaks": [
+                        { name: "Doddabetta Peak", description: "Highest point in the Nilgiris.", icon: "⛰️" }
+                    ],
+                    "Railways": [
+                        { name: "Nilgiri Mountain Railway", description: "UNESCO World Heritage toy train ride.", icon: "🚂" }
+                    ]
+                }
+            },
+            "Kodaikanal": {
+                icon: "🌲",
+                places: {
+                    "Lakes": [
+                        { name: "Kodaikanal Lake", description: "Boating and cycling.", icon: "🌊" }
+                    ],
+                    "Viewpoints": [
+                        { name: "Coaker's Walk", description: "Scenic walkway with panoramic views.", icon: "🔭" },
+                        { name: "Pillar Rocks", description: "Giant rock formations.", icon: "🗿" }
+                    ],
+                    "Parks/Gardens": [
+                        { name: "Bryant Park", description: "Flower gardens.", icon: "🌼" }
+                    ],
+                    "Waterfalls": [
+                        { name: "Silver Cascade Falls", description: "Beautiful waterfall on the way from Kodaikanal town.", icon: "🏞️" }
+                    ]
+                }
+            },
+            "Rameswaram": {
+                icon: "🌉",
+                places: {
+                    "Temples": [
+                        { name: "Ramanathaswamy Temple", description: "Famous for its long corridors and religious significance.", icon: "🕉️" }
+                    ],
+                    "Holy Sites": [
+                        { name: "Agni Theertham", description: "Holy water bathing site.", icon: "🙏" }
+                    ],
+                    "Landmarks": [
+                        { name: "Pamban Bridge", description: "Iconic railway bridge connecting Rameswaram to mainland India.", icon: "🌉" }
+                    ],
+                    "Beaches/Ruins": [
+                        { name: "Dhanushkodi", description: "Ruins and scenic beach.", icon: "🏖️" }
+                    ],
+                    "Hills": [
+                        { name: "Gandhamadhana Parvatham", description: "Hill with panoramic views of the town and sea.", icon: "🌄" }
+                    ]
+                }
+            },
+            "Kanyakumari": {
+                icon: "🌅",
+                places: {
+                    "Memorials": [
+                        { name: "Vivekananda Rock Memorial", description: "Statue and meditation center on a rock island.", icon: "🧘" },
+                        { name: "Thiruvalluvar Statue", description: "Monument of the Tamil poet.", icon: "🗿" }
+                    ],
+                    "Beaches": [
+                        { name: "Kanyakumari Beach", description: "Famous for sunrise and sunset views.", icon: "🌅" },
+                        { name: "Sunset Point", description: "Best view of the meeting point of three oceans.", icon: "🌇" }
+                    ],
+                    "Palaces": [
+                        { name: "Padmanabhapuram Palace", description: "Historic palace nearby.", icon: "👑" }
+                    ]
+                }
+            },
+            "Palani": {
+                icon: "🛕",
+                places: {
+                    "Temples": [
+                        { name: "Palani Murugan Temple", description: "Famous hill temple dedicated to Lord Murugan.", icon: "🛕" }
+                    ],
+                    "Dams/Reservoirs": [
+                        { name: "Shanmuganathi Dam", description: "Nearby scenic dam area.", icon: "💧" },
+                        { name: "Azhiyar Reservoir", description: "Natural scenic spot nearby.", icon: "💧" }
+                    ],
+                    "Waterfalls": [
+                        { name: "Palaruvi Waterfalls", description: "Short trek to nearby waterfalls.", icon: "🏞️" }
+                    ]
                 }
             }
-        };
-
-        let currentState = 'Tamil Nadu';
-        let currentDistrict = 'Chennai'; // Default district
-        let selectedCategory = 'all';
-
-        function initializePage() {
-            const userEmail = localStorage.getItem('userEmail');
-            if (!userEmail) {
-                window.location.href = 'index.html';
-                return;
-            }
-            
-            document.getElementById('userEmail').textContent = userEmail;
-            
-            // 1. Read the district from the URL parameter
-            const urlParams = new URLSearchParams(window.location.search);
-            const initialDistrict = urlParams.get('district');
-            
-            // 2. Set the current district based on the URL or default to 'Chennai'
-            if (initialDistrict && touristData[currentState] && touristData[currentState][initialDistrict]) {
-                currentDistrict = initialDistrict;
-            } else {
-                // If no valid district is selected (e.g., first load), default to Chennai.
-                currentDistrict = 'Chennai'; 
-            }
-            
-            updatePageTitles();
-            renderDistrictFilter();
-            renderCategoryFilter();
-            renderPlaces();
         }
+    };
 
-        function updatePageTitles() {
-            document.getElementById('pageTitle').textContent = `${currentDistrict} Tourism`;
-            document.getElementById('mainTitle').textContent = `Explore ${currentDistrict} 🌴`;
-            document.getElementById('mainDescription').innerHTML = `Tourist attractions in **${currentDistrict}, Tamil Nadu**, categorized for easy planning.`;
+    let currentState = 'Tamil Nadu';
+    let currentDistrict = 'Chennai';
+    let selectedCategory = 'all';
+
+    function initializePage() {
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+            window.location.href = 'index.html';
+            return;
         }
         
-        // **********************************************
-        // MODIFIED FUNCTION: setDistrict now redirects the page
-        // **********************************************
-        function setDistrict(district) {
-            // Redirects to the current page, adding the district as a URL parameter
-            window.location.href = `tourist-places.html?district=${district}`; 
-            // Note: If you saved this file as 'places.html', use 'places.html?district=${district}'
+        document.getElementById('userEmail').textContent = userEmail;
+        
+        // Get state and district from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const state = urlParams.get('state');
+        const district = urlParams.get('district');
+        
+        if (state && touristData[state]) {
+            currentState = state;
         }
         
-        // Function to render district buttons
-        function renderDistrictFilter() {
-            const filterContainer = document.getElementById('districtFilter');
-            const districts = Object.keys(touristData[currentState]);
-            
-            let buttonsHTML = '';
-            
-            districts.forEach(district => {
-                const icon = touristData[currentState][district].icon || '📍';
-                const isActive = currentDistrict === district;
-                
-                // The onclick now calls the modified setDistrict which performs the redirect
-                buttonsHTML += `
-                    <button 
-                        onclick="setDistrict('${district}')" 
-                        class="${isActive ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'} 
-                                px-3 py-1 rounded-lg transition-colors duration-200 text-sm font-medium shadow-sm flex items-center space-x-1 whitespace-nowrap"
-                    >
-                        <span>${icon}</span>
-                        <span>${district}</span>
-                    </button>
-                `;
-            });
-
-            filterContainer.innerHTML = buttonsHTML;
+        if (district && touristData[currentState] && touristData[currentState][district]) {
+            currentDistrict = district;
         }
+        
+        updatePageTitles();
+        renderCategoryFilter();
+        renderPlaces();
+    }
 
-        // The rest of the category and place rendering functions remain the same
-        function getAvailableCategories() {
-            const districtData = touristData[currentState][currentDistrict];
-            if (!districtData || !districtData.places) return [];
-            return Object.keys(districtData.places);
-        }
+    function updatePageTitles() {
+        document.getElementById('pageTitle').textContent = `${currentDistrict} Tourism`;
+        document.getElementById('mainTitle').textContent = `Popular Tourist Places of ${currentDistrict}`;
+        document.getElementById('mainDescription').innerHTML = `Discover amazing tourist attractions in **${currentDistrict}, ${currentState}** categorized for easy planning.`;
+    }
 
-        function renderCategoryFilter() {
-            const filterContainer = document.getElementById('categoryFilter');
-            const categories = getAvailableCategories();
+    function getAvailableCategories() {
+        const districtData = touristData[currentState][currentDistrict];
+        if (!districtData || !districtData.places) return [];
+        return Object.keys(districtData.places);
+    }
+
+    function renderCategoryFilter() {
+        const filterContainer = document.getElementById('categoryFilter');
+        const categories = getAvailableCategories();
+        
+        let buttonsHTML = `
+            <button onclick="setCategory('all')" class="${selectedCategory === 'all' ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'} px-4 py-2 rounded-lg transition-colors duration-200 font-medium shadow-md">
+                All Places
+            </button>
+        `;
+        
+        categories.forEach(category => {
+            const firstPlace = touristData[currentState][currentDistrict].places[category][0];
+            const icon = firstPlace?.icon || '📍';
+            const isActive = selectedCategory === category;
             
-            let buttonsHTML = `
-                <button onclick="setCategory('all')" class="${selectedCategory === 'all' ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'} px-4 py-2 rounded-lg transition-colors duration-200 font-medium shadow-md">
-                    All Places
+            buttonsHTML += `
+                <button onclick="setCategory('${category}')" class="${isActive ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'} px-4 py-2 rounded-lg transition-colors duration-200 font-medium shadow-md flex items-center space-x-2">
+                    <span>${icon}</span>
+                    <span>${category}</span>
                 </button>
             `;
-            
-            categories.forEach(category => {
-                const firstPlace = touristData[currentState][currentDistrict].places[category][0];
-                const icon = firstPlace?.icon || '📍';
-                const isActive = selectedCategory === category;
-                
-                buttonsHTML += `
-                    <button onclick="setCategory('${category}')" class="${isActive ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'} px-4 py-2 rounded-lg transition-colors duration-200 font-medium shadow-md flex items-center space-x-2">
-                        <span>${icon}</span>
-                        <span>${category}</span>
-                    </button>
-                `;
+        });
+
+        filterContainer.innerHTML = buttonsHTML;
+    }
+
+    function setCategory(category) {
+        selectedCategory = category;
+        renderCategoryFilter(); 
+        renderPlaces();
+    }
+
+    function getFilteredPlaces() {
+        const districtData = touristData[currentState][currentDistrict];
+        if (!districtData || !districtData.places) return [];
+        
+        let allPlaces = [];
+        
+        if (selectedCategory === 'all') {
+            Object.keys(districtData.places).forEach(category => {
+                districtData.places[category].forEach(place => {
+                    allPlaces.push({ ...place, category: category }); 
+                });
             });
-
-            filterContainer.innerHTML = buttonsHTML;
+        } else {
+            const placesArray = districtData.places[selectedCategory] || [];
+            placesArray.forEach(place => {
+                allPlaces.push({ ...place, category: selectedCategory }); 
+            });
         }
+        
+        return allPlaces;
+    }
 
-        function setCategory(category) {
-            selectedCategory = category;
-            renderCategoryFilter(); 
-            renderPlaces();
+    function renderPlaces() {
+        const placesGrid = document.getElementById('placesGrid');
+        const places = getFilteredPlaces();
+        
+        if (places.length === 0) {
+            placesGrid.innerHTML = `<div class="col-span-full text-center py-12"><p class="text-xl text-gray-500">No tourist places found for this category in ${currentDistrict}.</p></div>`;
+            return;
         }
-
-        function getFilteredPlaces() {
-            const districtData = touristData[currentState][currentDistrict];
-            if (!districtData || !districtData.places) return [];
-            
-            let allPlaces = [];
-            
-            if (selectedCategory === 'all') {
-                Object.keys(districtData.places).forEach(category => {
-                    districtData.places[category].forEach(place => {
-                        allPlaces.push({ ...place, category: category }); 
-                    });
-                });
-            } else {
-                const placesArray = districtData.places[selectedCategory] || [];
-                placesArray.forEach(place => {
-                    allPlaces.push({ ...place, category: selectedCategory }); 
-                });
-            }
-            
-            return allPlaces;
-        }
-
-        function renderPlaces() {
-            const placesGrid = document.getElementById('placesGrid');
-            const places = getFilteredPlaces();
-            
-            if (places.length === 0) {
-                placesGrid.innerHTML = `<div class="col-span-full text-center py-12"><p class="text-xl text-gray-500">No tourist places found for this category in ${currentDistrict}.</p></div>`;
-                return;
-            }
-            
-            placesGrid.innerHTML = places.map((place, index) => `
-                <div class="shadow-lg border-0 bg-white/90 backdrop-blur-sm hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="${index * 100}">
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-2">
-                            <h3 class="text-xl font-bold text-gray-900 text-balance">${place.icon} ${place.name}</h3>
-                        </div>
-                        <span class="bg-teal-100 text-teal-700 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-3 shadow-inner">
-                            ${place.category}
-                        </span>
-                        <p class="text-gray-600 text-pretty">${place.description}</p>
+        
+        placesGrid.innerHTML = places.map((place, index) => `
+            <div class="shadow-lg border-0 bg-white/90 backdrop-blur-sm hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="${index * 100}">
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-2">
+                        <h3 class="text-xl font-bold text-gray-900 text-balance">${place.icon} ${place.name}</h3>
                     </div>
+                    <span class="bg-teal-100 text-teal-700 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-3 shadow-inner">
+                        ${place.category}
+                    </span>
+                    <p class="text-gray-600 text-pretty">${place.description}</p>
                 </div>
-            `).join('');
-        }
+            </div>
+        `).join('');
+    }
 
-        function goBack() {
-            window.location.href = 'map.html';
-        }
+    function goBack() {
+        // Go back to districts page with the current state
+        window.location.href = `districts.html?state=${encodeURIComponent(currentState)}`;
+    }
 
-        function handleLogout() {
-            localStorage.removeItem('userEmail');
-            window.location.href = 'index.html';
-        }
-    </script>
+    function handleLogout() {
+        localStorage.removeItem('userEmail');
+        window.location.href = 'index.html';
+    }
+</script>
 </body>
 </html>
