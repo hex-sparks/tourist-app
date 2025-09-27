@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore India - Select State</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS to define the map container and load the India map image */
+        .map-container {
+            /* Using a sketch-style map image to visualize the boundaries */
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e5/India_political_map_%28outline%29.png'); /* A good outline map */
+            background-size: contain; /* Ensures the entire map fits */
+            background-repeat: no-repeat;
+            background-position: center center; /* Centers the map visually */
+            aspect-ratio: 1 / 1.1; /* Sets a height proportional to the width for map shape */
+            width: 100%;
+            max-width: 650px; 
+            margin: 0 auto;
+            background-color: #f7fafc; /* Light background for the sketch lines to stand out */
+        }
+        
+        /* State Marker styling to ensure visibility on the sketch map */
+        .state-marker {
+            white-space: nowrap;
+            padding: 4px 8px;
+            border-radius: 9999px; 
+            font-size: 0.7rem; /* text-xs */
+            line-height: 1;
+            font-weight: 600; 
+            border: 2px solid white; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            transform: translate(-50%, -50%); /* Centers the marker on its coordinates */
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50" onload="initializeMap()">
+
+    <header class="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-7 h-7 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <h1 class="text-xl font-bold text-gray-900">Explore India</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 text-sm text-gray-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <span id="userEmail"></span>
+                    </div>
+                    <button onclick="handleLogout()" class="text-gray-600 hover:text-gray-900 bg-transparent border border-gray-300 px-3 py-1 rounded-md text-sm transition-colors duration-200">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Choose Your Destination 🗺️</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Click on any state to explore. Currently, only **Tamil Nadu** is active.
+            </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto shadow-xl border-0 bg-white/90 backdrop-blur-sm rounded-xl">
+            <div class="p-6">
+                <div class="relative rounded-lg overflow-hidden border-4 border-gray-200 shadow-inner map-container">
+                    <div id="stateMarkers" class="absolute inset-0"></div>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <div class="inline-flex items-center space-x-6 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-orange-600 rounded-full"></div>
+                            <span class="text-gray-600">Active (Tamil Nadu)</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-gray-600 rounded-full"></div>
+                            <span class="text-gray-600">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Data for all states (Coordinates adjusted for visual map accuracy)
+        const indianStates = [
+            // SOUTH INDIA (TN is Active)
+            { name: "Tamil Nadu", clickable: true, x: "50%", y: "83%", markerClass: "bg-orange-600 hover:bg-orange-700 text-white hover:scale-105" }, 
+            { name: "Kerala", clickable: false, x: "40%", y: "85%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Karnataka", clickable: false, x: "40%", y: "70%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Andhra Pradesh", clickable: false, x: "55%", y: "65%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Telangana", clickable: false, x: "48%", y: "58%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Goa", clickable: false, x: "35%", y: "67%", markerClass: "bg-gray-600 text-white opacity-90" },
+            
+            // WEST & CENTRAL INDIA
+            { name: "Maharashtra", clickable: false, x: "36%", y: "50%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Gujarat", clickable: false, x: "23%", y: "45%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Rajasthan", clickable: false, x: "28%", y: "35%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Madhya Pradesh", clickable: false, x: "42%", y: "45%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Chhattisgarh", clickable: false, x: "50%", y: "47%", markerClass: "bg-gray-600 text-white opacity-90" },
+
+            // NORTH INDIA
+            { name: "Uttar Pradesh", clickable: false, x: "50%", y: "35%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Haryana", clickable: false, x: "37%", y: "30%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Punjab", clickable: false, x: "32%", y: "26%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Himachal Pradesh", clickable: false, x: "38%", y: "22%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Uttarakhand", clickable: false, x: "45%", y: "25%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Jammu & Kashmir", clickable: false, x: "35%", y: "15%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Ladakh", clickable: false, x: "45%", y: "10%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Delhi (UT)", clickable: false, x: "40%", y: "30%", markerClass: "bg-gray-600 text-white opacity-90" },
+            
+            // EAST INDIA
+            { name: "Bihar", clickable: false, x: "55%", y: "38%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Jharkhand", clickable: false, x: "57%", y: "42%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "West Bengal", clickable: false, x: "60%", y: "40%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Odisha", clickable: false, x: "58%", y: "53%", markerClass: "bg-gray-600 text-white opacity-90" },
+            
+            // NORTH EAST INDIA
+            { name: "Sikkim", clickable: false, x: "65%", y: "30%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Arunachal Pradesh", clickable: false, x: "75%", y: "30%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Assam", clickable: false, x: "70%", y: "35%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Meghalaya", clickable: false, x: "68%", y: "40%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Nagaland", clickable: false, x: "75%", y: "35%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Manipur", clickable: false, x: "75%", y: "40%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Mizoram", clickable: false, x: "75%", y: "45%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Tripura", clickable: false, x: "70%", y: "48%", markerClass: "bg-gray-600 text-white opacity-90" },
+
+            // UNION TERRITORIES (Simplified Placement)
+            { name: "A & N Islands", clickable: false, x: "80%", y: "85%", markerClass: "bg-gray-600 text-white opacity-90" },
+            { name: "Puducherry", clickable: false, x: "52%", y: "78%", markerClass: "bg-gray-600 text-white opacity-90" },
+        ];
+
+        function initializeMap() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                // Redirect back to login if not signed in
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            document.getElementById('userEmail').textContent = userEmail;
+            
+            const markersContainer = document.getElementById('stateMarkers');
+            markersContainer.innerHTML = ''; // Clear existing markers
+            
+            indianStates.forEach(state => {
+                const button = document.createElement('button');
+                
+                // Set the base and dynamic classes for styling
+                button.className = `state-marker absolute cursor-pointer transition-all duration-200 ${state.markerClass}`;
+                
+                // Add hover effect only for clickable states
+                if (state.clickable) {
+                    button.classList.add('cursor-pointer', 'hover:shadow-lg');
+                } else {
+                    button.classList.add('cursor-not-allowed');
+                }
+
+                button.style.left = state.x;
+                button.style.top = state.y;
+                button.textContent = state.name;
+                button.title = state.clickable ? `Click to explore ${state.name}` : `${state.name} - Coming Soon`;
+                button.disabled = !state.clickable;
+                
+                if (state.clickable) {
+                    button.onclick = () => handleStateClick(state);
+                }
+                
+                markersContainer.appendChild(button);
+            });
+        }
+
+        function handleStateClick(state) {
+            if (state.name === "Tamil Nadu") {
+                // Redirect to the tourist places page for Coimbatore
+                window.location.href = `tourist-places.html?state=Tamil%20Nadu&city=Coimbatore`;
+            } else {
+                alert(`Tourism data for ${state.name} is coming soon!`);
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('userEmail');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
