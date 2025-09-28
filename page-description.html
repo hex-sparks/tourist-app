@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Place Description</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
+
+<header class="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16 relative">
+      <!-- Back Button -->
+      <button onclick="window.history.back()" 
+        class="text-gray-600 hover:text-gray-900 bg-transparent px-3 py-1 rounded-md text-sm transition-colors duration-200 flex items-center space-x-1 z-10">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        <span>Back</span>
+      </button>
+
+      <!-- Title -->
+      <div class="absolute inset-x-0 flex justify-center items-center h-full">
+        <h1 class="text-xl font-bold text-gray-900 text-center truncate" id="placeTitle">Place</h1>
+      </div>
+
+      <!-- Cart -->
+      <button onclick="viewCart()" 
+        class="text-white bg-teal-600 hover:bg-teal-700 px-3 py-1 rounded-md text-sm font-semibold transition-colors duration-200 shadow-md z-10">
+        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+        </svg>
+        View Places
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-4 py-8">
+  <div id="descriptionArea" class="text-gray-900 space-y-4 text-lg font-sans"></div>
+
+  <!-- Buttons -->
+  <button id="showMapBtn" 
+    class="mt-8 bg-teal-600 text-white px-5 py-2 rounded-md text-sm font-semibold hover:bg-teal-700 transition-colors">
+    Show Map
+  </button>
+  <button id="addCartBtn" 
+    class="mt-4 bg-orange-600 text-white px-5 py-2 rounded-md text-sm font-semibold hover:bg-orange-700 transition-colors">
+    Add Place
+  </button>
+</main>
+
+<script>
+const placeDescriptions = {
+  "Marina Beach": `
+    <img src="images/marina-beach.jpg" alt="Marina Beach" class="rounded-xl mb-4 w-full object-cover max-h-64">
+    <p><b>Description:</b> Marina Beach is India’s longest urban beach, stretching 13 km along the Bay of Bengal. It is a hub for morning walkers, families, and street food lovers. The beach is dotted with statues, memorials, and vibrant stalls. Horse rides and kite flying are common attractions. The sunrise and sunset views are breathtaking. Vendors sell spicy sundal and crispy murukku. Political rallies and cultural events are often held here. Swimming is restricted due to strong currents. Marina is the pride of Chennai.</p>
+    <p><b>Opening Hours:</b> 24 Hours</p>
+    <p><b>Entry Fee:</b> Free</p>
+  `,
+  "Fort St. George": `
+    <img src="images/fort-st-george.jpg" alt="Fort St. George" class="rounded-xl mb-4 w-full object-cover max-h-64">
+    <p><b>Description:</b> Fort St. George, built in 1644, was the first English fortress in India. It houses the St. Mary’s Church, the oldest Anglican church in India, and a museum with colonial artifacts, coins, uniforms, and maps. The fort played a key role in Chennai’s history as a British stronghold. It is an architectural landmark showcasing colonial-era design and governance.</p>
+    <p><b>Opening Hours:</b> 9 AM – 5 PM</p>
+    <p><b>Entry Fee:</b> ₹50 (museum)</p>
+  `,
+  "Kapaleeshwarar Temple": `
+    <img src="images/kapaleeshwarar-temple.jpg" alt="Kapaleeshwarar Temple" class="rounded-xl mb-4 w-full object-cover max-h-64">
+    <p><b>Description:</b> Located in Mylapore, Kapaleeshwarar Temple is a magnificent Dravidian-style temple dedicated to Lord Shiva. Its towering gopuram is decorated with colorful sculptures depicting mythological scenes. The temple hosts the famous Arubathimoovar festival every year, attracting thousands of devotees. The sacred temple tank is used for ritual baths.</p>
+    <p><b>Opening Hours:</b> 5 AM – 12 PM, 4 PM – 9 PM</p>
+    <p><b>Entry Fee:</b> Free</p>
+  `,
+  "San Thome Basilica": `
+    <img src="images/san-thome-basilica.jpg" alt="San Thome Basilica" class="rounded-xl mb-4 w-full object-cover max-h-64">
+    <p><b>Description:</b> San Thome Basilica is a Neo-Gothic Roman Catholic church built over the tomb of St. Thomas the Apostle. It is one of the only three basilicas in the world built on an apostle’s tomb. Its tall spires, stained glass, and peaceful interiors make it an architectural gem. A museum inside displays relics and artifacts.</p>
+    <p><b>Opening Hours:</b> 6 AM – 9 PM</p>
+    <p><b>Entry Fee:</b> Free</p>
+  `,
+  "Guindy National Park": `
+    <img src="images/guindy-national-park.jpg" alt="Guindy National Park" class="rounded-xl mb-4 w-full object-cover max-h-64">
+    <p><b>Description:</b> Guindy National Park is one of the few national parks located inside a city. It covers 2.7 sq km and is home to blackbucks, spotted deer, jackals, snakes, and over 130 bird species. It also has a snake park and children’s park, making it a popular spot for families. Nature trails and greenery make it a peaceful escape within Chennai.</p>
+    <p><b>Opening Hours:</b> 9 AM – 5:30 PM</p>
+    <p><b>Entry Fee:</b> ₹15 (adults), ₹10 (children)</p>
+    
+  `,
+  // Ooty
+"Ooty Botanical Garden": `
+  <img src="images/ooty-botanical-garden.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Ooty Botanical Garden, established in 1848, is spread across 55 acres. It showcases a wide range of exotic plants, rare species, orchids, and bonsai trees. A 20-million-year-old fossil tree is preserved here. The garden is divided into Italian Garden, New Garden, Conservatory, and Nurseries. It is a paradise for photographers and nature lovers.</p>
+  <p><b>Opening Hours:</b> 7 AM – 6:30 PM</p>
+  <p><b>Entry Fee:</b> ₹30 (adults), ₹15 (children)</p>
+`,
+"Ooty Lake": `
+  <img src="images/ooty-lake.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Ooty Lake is a man-made lake built in 1824 by John Sullivan. Surrounded by eucalyptus trees and greenery, it is popular for boating. Pedal boats, row boats, and motor boats are available. The lake also has a boathouse, a children’s park, and a mini train. It is a peaceful picnic spot in Ooty.</p>
+  <p><b>Opening Hours:</b> 9 AM – 6 PM</p>
+  <p><b>Entry Fee:</b> ₹20</p>
+`,
+"Doddabetta Peak": `
+  <img src="images/doddabetta.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Doddabetta Peak, at 2,637 meters, is the highest mountain in the Nilgiris. It offers breathtaking views of the Western and Eastern Ghats. The observatory at the top has telescopes for tourists. Trekking trails lead through forests rich in rhododendrons and wildflowers. It’s a must-visit for adventure lovers and photographers.</p>
+  <p><b>Opening Hours:</b> 9 AM – 6:30 PM</p>
+  <p><b>Entry Fee:</b> ₹10</p>
+`,
+// Kodaikanal
+"Kodaikanal Lake": `
+  <img src="images/kodaikanal-lake.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Kodaikanal Lake, a star-shaped man-made lake, is the heart of Kodaikanal. It was built in 1863 by Sir Vere Henry Levinge. Surrounded by lush green hills and eucalyptus trees, it is famous for boating, cycling, and horse riding. The annual boat pageant and flower shows are major attractions. The lakefront is also a popular picnic spot.</p>
+  <p><b>Opening Hours:</b> 6 AM – 6 PM</p>
+  <p><b>Entry Fee:</b> Free (boating charges extra)</p>
+`,
+
+"Coaker's Walk": `
+  <img src="images/coakers-walk.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Coaker’s Walk is a 1 km paved pedestrian path built in 1872 by Lt. Coaker. It offers panoramic views of the valleys, plains, and distant hills. On clear days, you can see Dolphin’s Nose, Periyakulam town, and even Madurai city lights at night. It is one of the best viewpoints in Kodaikanal.</p>
+  <p><b>Opening Hours:</b> 7 AM – 7 PM</p>
+  <p><b>Entry Fee:</b> ₹10</p>
+`,
+
+"Pillar Rocks": `
+  <img src="images/pillar-rocks.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Pillar Rocks are a set of three giant rock pillars standing 400 feet high. They are surrounded by dense woods and mist, creating a dramatic landscape. The viewpoint also has a beautiful garden nearby. It is a favorite spot for photographers and nature lovers visiting Kodaikanal.</p>
+  <p><b>Opening Hours:</b> 9 AM – 4 PM</p>
+  <p><b>Entry Fee:</b> ₹5</p>
+`,
+// Rameswaram
+"Ramanathaswamy Temple": `
+  <img src="images/rameswaram.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Ramanathaswamy Temple is one of the twelve Jyotirlinga temples dedicated to Lord Shiva. Famous for its longest temple corridor in the world with 1,212 pillars, intricate carvings, and sacred tanks, it is a major pilgrimage site. Devotees take a holy dip in the 22 theerthams before entering the sanctum.</p>
+  <p><b>Opening Hours:</b> 5 AM – 1 PM, 3 PM – 9 PM</p>
+  <p><b>Entry Fee:</b> Free (special darshan ₹50 – ₹200)</p>
+`,
+
+"Pamban Bridge": `
+  <img src="images/pamban-bridge.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Pamban Bridge is India’s first sea bridge, connecting Rameswaram island to the mainland. It was opened in 1914 and is still a marvel of engineering. The view of trains crossing the bridge over turquoise blue waters is breathtaking, making it a must-visit for photographers and travelers.</p>
+  <p><b>Opening Hours:</b> Open 24 hours (best visited at sunrise or sunset)</p>
+  <p><b>Entry Fee:</b> Free</p>
+`,
+
+"Dhanushkodi Beach": `
+  <img src="images/dhanushkodi.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Dhanushkodi, often called the “Ghost Town,” is located at the tip of Rameswaram island where the Bay of Bengal meets the Indian Ocean. Once a bustling town, it was destroyed in the 1964 cyclone. Visitors can see ruins of churches, railway stations, and the confluence of two seas. It’s a place filled with history and natural beauty.</p>
+  <p><b>Opening Hours:</b> 6 AM – 6 PM</p>
+  <p><b>Entry Fee:</b> Free</p>
+`,
+// Kanyakumari
+"Vivekananda Rock Memorial": `
+  <img src="images/vivekananda-rock.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Vivekananda Rock Memorial is situated on a small island off the coast of Kanyakumari. Built in 1970 in honor of Swami Vivekananda, who meditated here, the memorial combines traditional Indian architecture with serene surroundings. Visitors can enjoy panoramic views of the ocean where the Arabian Sea, Bay of Bengal, and Indian Ocean meet.</p>
+  <p><b>Opening Hours:</b> 8 AM – 4 PM</p>
+  <p><b>Entry Fee:</b> ₹20 (ferry charges ₹50 – ₹150)</p>
+`,
+
+"Thiruvalluvar Statue": `
+  <img src="images/thiruvalluvar-statue.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> The Thiruvalluvar Statue is a 133-foot tall stone sculpture dedicated to the great Tamil poet and philosopher, Thiruvalluvar. Standing on a rock island near Vivekananda Rock Memorial, it represents the 133 chapters of the Tirukkural. The view of the statue with waves crashing around is breathtaking.</p>
+  <p><b>Opening Hours:</b> 8 AM – 4 PM</p>
+  <p><b>Entry Fee:</b> Free (ferry charges apply)</p>
+`,
+
+"Kanyakumari Beach": `
+  <img src="images/kanyakumari-beach.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Kanyakumari Beach is famous for its unique sunrise and sunset views over the ocean. It is the southernmost tip of mainland India, where the Bay of Bengal, Arabian Sea, and Indian Ocean meet. Visitors also enjoy walking along the shore, buying seashell souvenirs, and viewing the Gandhi Mandapam nearby.</p>
+  <p><b>Opening Hours:</b> Open 24 hours (best for sunrise & sunset)</p>
+  <p><b>Entry Fee:</b> Free</p>
+`,
+// Palani
+"Palani Murugan Temple": `
+  <img src="images/palani-temple.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Palani Murugan Temple is one of the six abodes (Arupadai Veedu) of Lord Murugan. Located on the Sivagiri Hills, it is renowned for its sacred Navapashanam idol. Pilgrims climb steps or take a winch/rope car to reach the shrine. It is one of Tamil Nadu’s most visited pilgrimage centers.</p>
+  <p><b>Opening Hours:</b> 5:30 AM – 9 PM</p>
+  <p><b>Entry Fee:</b> Free (Special darshan ₹10 – ₹100)</p>
+`,
+
+"Varathamanathi Dam": `
+  <img src="images/varathamanathi-dam.jpg" class="rounded-xl mb-4 w-full object-cover max-h-64">
+  <p><b>Description:</b> Varathamanathi Dam is a scenic picnic spot near Palani, surrounded by hills and lush greenery. It provides irrigation to nearby villages and is a calm retreat for families and nature lovers. Tourists enjoy relaxing walks, photography, and peaceful time near the dam waters.</p>
+  <p><b>Opening Hours:</b> 9 AM – 6 PM</p>
+  <p><b>Entry Fee:</b> Free</p>
+`,
+
+
+};
+
+// map page links:
+const mapPages = {
+  "Marina Beach": "marina-beach-map.html",
+  "Fort St. George": "fort-st-george-map.html",
+  "Kapaleeshwarar Temple": "kapaleeshwarar-temple-map.html",
+  "San Thome Basilica": "santhome-basilica-map.html",
+  "Guindy National Park": "guindy-park-map.html",
+  "Ooty Botanical Garden": "ooty-botanical-garden-map.html",
+"Ooty Lake": "ooty-lake-map.html",
+"Doddabetta Peak": "doddabetta-peak-map.html",
+"Kodaikanal Lake": "kodaikanal-lake-map.html",
+"Coaker's Walk": "coakers-walk-map.html",
+"Pillar Rocks": "pillar-rocks-map.html",
+"Ramanathaswamy Temple": "ramanathaswamy-temple-map.html",
+"Pamban Bridge": "pamban-bridge-map.html",
+"Dhanushkodi": "dhanushkodi-map.html",
+"Vivekananda Rock Memorial": "vivekananda-rock-map.html",
+"Thiruvalluvar Statue": "thiruvalluvar-statue-map.html",
+"Kanyakumari Beach": "kanyakumari-beach-map.html",
+"Palani Murugan Temple": "palani-murugan-temple-map.html",
+"Varathamanathi Dam": "varathamanathi-dam-map.html",
+
+
+};
+
+function getPlaceFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('place');
+}
+
+function initialize() {
+  const place = getPlaceFromUrl();
+  if (!place || !placeDescriptions[place]) {
+    document.getElementById('descriptionArea').innerHTML = "<p>Place description not found.</p>";
+    document.getElementById('showMapBtn').style.display = "none";
+    document.getElementById('addCartBtn').style.display = "none";
+    document.getElementById('placeTitle').textContent = "Unknown Place";
+    return;
+  }
+  document.getElementById('placeTitle').textContent = place;
+  document.getElementById('descriptionArea').innerHTML = placeDescriptions[place];
+
+  // Redirect Show Map → that place's map html
+  document.getElementById('showMapBtn').addEventListener('click', () => {
+    const mapPage = mapPages[place];
+    if (mapPage) {
+      window.location.href = mapPage;
+    } else {
+      alert("Map page not found for this place.");
+    }
+  });
+}
+
+function viewCart() {
+  window.location.href = 'cart.html';
+}
+
+window.onload = initialize;
+</script>
+</body>
+</html>
