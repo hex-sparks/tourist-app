@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Districts - Explore Tamil Nadu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50" onload="initializePage()">
+
+<header class="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-3">
+                <button
+                    onclick="goBack()"
+                    class="text-gray-600 hover:text-gray-900 bg-transparent px-2 py-1 rounded-md text-sm transition-colors duration-200"
+                >
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to Map
+                </button>
+                <div class="h-6 w-px bg-gray-300"></div>
+                <h1 class="text-xl font-bold text-gray-900" id="pageTitle">Districts</h1>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <span id="userEmail"></span>
+                </div>
+                <button
+                    onclick="handleLogout()"
+                    class="text-gray-600 hover:text-gray-900 bg-transparent border border-gray-300 px-3 py-1 rounded-md text-sm transition-colors duration-200"
+                >
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2" id="mainTitle">Select District</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto" id="mainDescription">
+            Choose a district to explore its tourist attractions.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="districtsGrid">
+    </div>
+
+    <div class="mt-12 text-center">
+        <p class="text-gray-500 mb-4">Click the 'Back to Map' button to explore other states.</p>
+    </div>
+</main>
+
+<script>
+    // Districts data for different states
+    const stateDistrictsData = {
+        "Tamil Nadu": {
+            "Chennai": {
+                icon: "🏛️",
+                description: "Capital city with beaches, temples, and historical sites."
+            },
+            "Ooty": {
+                icon: "⛰️",
+                description: "Hill station famous for botanical gardens and toy train."
+            },
+            "Kodaikanal": {
+                icon: "🌲",
+                description: "Princess of hill stations with lakes and viewpoints."
+            },
+            "Rameswaram": {
+                icon: "🌉",
+                description: "Holy city with temples and the famous Pamban Bridge."
+            },
+            "Kanyakumari": {
+                icon: "🌅",
+                description: "Southernmost tip where three oceans meet."
+            },
+            "Palani": {
+                icon: "🛕",
+                description: "Famous pilgrimage center with Murugan temple."
+            }
+        },
+        "Kerala": {
+            "Kochi": {
+                icon: "🌊",
+                description: "Port city with backwaters and spice markets."
+            },
+            "Munnar": {
+                icon: "🍃",
+                description: "Hill station famous for tea plantations."
+            },
+            "Alleppey": {
+                icon: "🛶",
+                description: "Venice of the East with beautiful backwaters."
+            },
+            "Thiruvananthapuram": {
+                icon: "🏛️",
+                description: "Capital city with beaches and temples."
+            }
+        },
+        "Karnataka": {
+            "Bangalore": {
+                icon: "🌆",
+                description: "Garden city and IT hub of India."
+            },
+            "Mysore": {
+                icon: "👑",
+                description: "City of palaces with rich cultural heritage."
+            },
+            "Hampi": {
+                icon: "🗿",
+                description: "UNESCO World Heritage site with ancient ruins."
+            },
+            "Coorg": {
+                icon: "☕",
+                description: "Coffee plantation hills with scenic beauty."
+            }
+        }
+    };
+
+    let currentState = 'Tamil Nadu';
+
+    function initializePage() {
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+            window.location.href = 'index.html';
+            return;
+        }
+        
+        document.getElementById('userEmail').textContent = userEmail;
+        
+        // Get state from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const state = urlParams.get('state');
+        
+        if (state && stateDistrictsData[state]) {
+            currentState = state;
+        }
+        
+        updatePageTitles();
+        renderDistricts();
+    }
+
+    function updatePageTitles() {
+        document.getElementById('pageTitle').textContent = `${currentState} Districts`;
+        document.getElementById('mainTitle').textContent = `Explore ${currentState} 🌴`;
+        document.getElementById('mainDescription').innerHTML = `Choose a district in **${currentState}** to explore its tourist attractions.`;
+    }
+
+    function renderDistricts() {
+        const districtsGrid = document.getElementById('districtsGrid');
+        const districts = stateDistrictsData[currentState] || {};
+        const districtNames = Object.keys(districts);
+        
+        if (districtNames.length === 0) {
+            districtsGrid.innerHTML = `
+                <div class="col-span-full text-center py-12">
+                    <p class="text-xl text-gray-500">Districts data for ${currentState} is coming soon!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        districtsGrid.innerHTML = districtNames.map((district, index) => {
+            const districtData = districts[district];
+            return `
+                <div class="shadow-lg border-0 bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 rounded-xl overflow-hidden cursor-pointer transform hover:scale-105" 
+                     onclick="selectDistrict('${district}')" 
+                     data-aos="fade-up" 
+                     data-aos-delay="${index * 100}">
+                    <div class="p-6">
+                        <div class="flex items-center justify-center mb-4">
+                            <div class="text-5xl">${districtData.icon}</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 text-center mb-3">${district}</h3>
+                        <p class="text-gray-600 text-center text-pretty">${districtData.description}</p>
+                        <div class="mt-4 text-center">
+                            <span class="bg-teal-100 text-teal-700 text-xs font-semibold px-3 py-1 rounded-full inline-block shadow-inner">
+                                Click to explore
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function selectDistrict(district) {
+        // Redirect to tourist places page with state and district parameters
+        window.location.href = `tourist-places.html?state=${encodeURIComponent(currentState)}&district=${encodeURIComponent(district)}`;
+    }
+
+    function goBack() {
+        window.location.href = 'map.html';
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('userEmail');
+        window.location.href = 'index.html';
+    }
+</script>
+</body>
+</html>

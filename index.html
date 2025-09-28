@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore India - Sign In</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4">
+                <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Explore India 🇮🇳</h1>
+            <p class="text-gray-600">Sign in with your email to start your journey.</p>
+        </div>
+
+        <div class="shadow-xl border-0 bg-white/90 backdrop-blur-sm rounded-xl p-8">
+            <form onsubmit="handleLogin(event)" class="space-y-6">
+                <h2 class="text-xl font-semibold text-gray-800 text-center">Welcome Back</h2>
+                <div class="space-y-2">
+                    <label for="email" class="text-sm font-medium text-gray-700">Email Address</label>
+                    <div class="relative">
+                        <svg class="absolute left-3 top-3 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        <input
+                            id="email"
+                            type="email"
+                            placeholder="user@example.com"
+                            class="pl-10 w-full px-3 py-2 bg-white/50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-200 focus:border-orange-500 focus:outline-none transition"
+                            required
+                        />
+                    </div>
+                </div>
+                <button
+                    type="submit"
+                    class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 shadow-md"
+                    id="loginBtn"
+                >
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to handle login process
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const loginBtn = document.getElementById('loginBtn');
+            
+            if (!email) return;
+
+            loginBtn.textContent = 'Signing In...';
+            loginBtn.disabled = true;
+
+            // **MOCK DB STORAGE:** Store email in localStorage. In a real application, this would be an API call to a server.
+            localStorage.setItem('userEmail', email);
+            console.log(`Email stored (MOCK DB): ${email}`);
+
+            // Simulate loading and redirect
+            setTimeout(() => {
+                window.location.href = 'map.html';
+            }, 1000);
+        }
+
+        // Check if user is already logged in (for simple session persistence)
+        if (localStorage.getItem('userEmail')) {
+            window.location.href = 'map.html';
+        }
+    </script>
+</body>
+</html>

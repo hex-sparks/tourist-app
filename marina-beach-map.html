@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marina Beach Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        #map { width: 100%; height: 70vh; margin: 2rem auto; border-radius: 1rem; box-shadow: 0 2px 12px #0001;}
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
+    <header class="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <button onclick="window.history.back()" 
+                        class="text-gray-600 hover:text-gray-900 bg-transparent px-2 py-1 rounded-md text-sm transition-colors duration-200">
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back
+                </button>
+                <h1 class="text-xl font-bold text-gray-900">Marina Beach Map</h1>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Marina Beach, Chennai</h2>
+            <p class="text-gray-700 mb-4">Explore Marina Beach on the map below.</p>
+            <div id='map'></div>
+        </div>
+    </main>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js'></script>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoibWF0aGVzLS0iLCJhIjoiY21nMjk0YjBwMGx0YTJtczZqYzBiMmVwMSJ9._vuIup5TuAMu7wviNmsWMw';
+        const marinaBeachCoords = [80.2830, 13.0500]; // Marina Beach, Chennai (you can adjust)
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: marinaBeachCoords,
+            zoom: 14
+        });
+
+        // Add marker for Marina Beach
+        new mapboxgl.Marker({ color: "#0d9488" })
+            .setLngLat(marinaBeachCoords)
+            .setPopup(new mapboxgl.Popup().setHTML("<b>Marina Beach</b><br>Chennai")) 
+            .addTo(map);
+    </script>
+</body>
+</html>

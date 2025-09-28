@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tourist Places - Explore Tamil Nadu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#f4fffd]">
+
+<header class="bg-transparent pt-10">
+    <div class="max-w-5xl mx-auto px-4">
+        <h2 class="text-4xl font-black text-center text-gray-900 mb-4 tracking-tight">Popular Tourist Places of Chennai</h2>
+        <p class="text-xl text-center text-gray-600 mb-8">Discover amazing tourist attractions in <span class="font-bold text-gray-700">Chennai, <span class="text-black font-extrabold">Tamil Nadu</span></span> categorized for easy planning.</p>
+    </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-4 pb-12">
+    <div id="categoryFilter" class="flex flex-wrap justify-center gap-4 mb-12"></div>
+    <div id="placesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+</main>
+
+<script>
+const touristData = {
+    "Tamil Nadu": {
+        "Chennai": {
+            icon: "🏛️",
+            places: {
+                "Beaches": [{ name: "Marina Beach", description: "Longest urban beach in India.", icon: "🌅" }],
+                "Historical Sites": [{ name: "Fort St. George", description: "Historic fort and museum.", icon: "🏰" }],
+                "Temples": [{ name: "Kapaleeshwarar Temple", description: "Iconic Dravidian architecture.", icon: "🛕" }],
+                "Churches": [{ name: "San Thome Basilica", description: "Roman Catholic Basilica built over St. Thomas' tomb.", icon: "⛪" }],
+                "Parks": [{ name: "Guindy National Park", description: "Urban wildlife park.", icon: "🦌" }]
+            }
+        }
+    }
+};
+
+let currentState = 'Tamil Nadu';
+let currentDistrict = 'Chennai';
+let selectedCategory = 'all';
+
+function initializePage() {
+    renderCategoryFilter();
+    renderPlaces();
+}
+window.onload = initializePage;
+
+function getAvailableCategories() {
+    const districtData = touristData[currentState][currentDistrict];
+    if (!districtData || !districtData.places) return [];
+    return Object.keys(districtData.places);
+}
+
+function renderCategoryFilter() {
+    const filterContainer = document.getElementById('categoryFilter');
+    const categories = getAvailableCategories();
+    let buttonsHTML = `
+    <button onclick="setCategory('all')" class="${selectedCategory === 'all' ? 'bg-teal-600 text-white shadow-lg' : 'bg-white text-gray-800 border'} font-semibold flex items-center gap-2 px-6 py-2 rounded-xl transition-colors focus:outline-none">
+        <span>All Places</span>
+    </button>
+    `;
+    const categoryIcons = {
+        "Beaches": "🏖️",
+        "Historical Sites": "🏰",
+        "Temples": "🛕",
+        "Churches": "⛪",
+        "Parks": "🦌"
+    };
+    categories.forEach(category => {
+        const isActive = selectedCategory === category;
+        buttonsHTML += `
+        <button onclick="setCategory('${category}')" class="${isActive ? 'bg-teal-600 text-white shadow-lg' : 'bg-white text-gray-800 border'} font-semibold flex items-center gap-2 px-6 py-2 rounded-xl transition-colors focus:outline-none">
+            <span>${categoryIcons[category] || '📍'}</span>
+            <span>${category}</span>
+        </button>
+        `;
+    });
+    filterContainer.innerHTML = buttonsHTML;
+}
+
+function setCategory(category) {
+    selectedCategory = category;
+    renderCategoryFilter();
+    renderPlaces();
+}
+
+function getFilteredPlaces() {
+    const districtData = touristData[currentState][currentDistrict];
+    if (!districtData || !districtData.places) return [];
+    let allPlaces = [];
+    if (selectedCategory === 'all') {
+        Object.keys(districtData.places).forEach(category => {
+            districtData.places[category].forEach(place => {
+                allPlaces.push({ ...place, category });
+            });
+        });
+    } else {
+        const placesArray = touristData[currentState][currentDistrict].places[selectedCategory] || [];
+        placesArray.forEach(place => {
+            allPlaces.push({ ...place, category: selectedCategory });
+        });
+    }
+    return allPlaces;
+}
+
+const categoryColors = {
+    "Beaches": "bg-teal-100 text-teal-700",
+    "Historical Sites": "bg-purple-100 text-indigo-700",
+    "Temples": "bg-indigo-100 text-indigo-700",
+    "Churches": "bg-green-100 text-green-700",
+    "Parks": "bg-orange-100 text-orange-700"
+};
+
+// Changed to match your filename for description page
+function getDescriptionPage(placeName) {
+    return `page-discription.html?place=${encodeURIComponent(placeName)}`;
+}
+
+function renderPlaces() {
+    const placesGrid = document.getElementById('placesGrid');
+    const places = getFilteredPlaces();
+    if (places.length === 0) {
+        placesGrid.innerHTML = `<div class="col-span-full text-center py-12"><p class="text-xl text-gray-500">No tourist places found for this category in ${currentDistrict}.</p></div>`;
+        return;
+    }
+    placesGrid.innerHTML = places
+        .map(
+            place => `
+            <div class="bg-white/95 rounded-2xl shadow-lg hover:shadow-xl transition-all border-0 cursor-pointer p-7 flex flex-col gap-2" onclick="window.location.href='${getDescriptionPage(place.name)}'">
+                <div class="flex items-center gap-3 mb-1">
+                    <span class="text-3xl">${place.icon}</span>
+                    <h3 class="text-2xl font-extrabold text-gray-900">${place.name}</h3>
+                </div>
+                <span class="text-xs font-bold px-4 py-1 rounded-full mb-1 inline-block ${categoryColors[place.category] || 'bg-gray-100 text-gray-700'}">
+                    ${place.category}
+                </span>
+                <p class="text-gray-600 text-lg font-medium">${place.description}</p>
+            </div>
+        `
+        )
+        .join('');
+}
+
+</script>
+
+</body>
+</html>
