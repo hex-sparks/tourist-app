@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Itinerary - Chennai Tourist Places</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-50 font-sans">
+
+<header class="pt-10 mb-8 shadow-lg bg-white/95 backdrop-blur-sm sticky top-0 z-10 border-b border-teal-100">
+  <div class="max-w-5xl mx-auto px-4">
+    
+    <!-- HEADER STRUCTURE: Back button left, Title block center -->
+    <div class="flex items-center justify-between relative pb-4">
+      <!-- Back Button (Far Left) -->
+      <button onclick="window.location.href='index.html'" class="bg-white text-gray-700 px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-100 font-semibold shadow-md transition-colors flex items-center gap-1 text-sm absolute left-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+        Back to Places List
+      </button>
+
+      <!-- Main Title (Center) -->
+      <div class="flex flex-col items-center mx-auto">
+        <h2 class="text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-cyan-500">
+          Your Travel Itinerary
+        </h2>
+        <p class="text-2xl text-gray-600 italic mt-2">
+          Places selected for your journey.
+        </p>
+      </div>
+    </div>
+    
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-4 pb-12">
+  <div id="cartItems" class="space-y-4">
+    <!-- Cart items will be rendered here -->
+  </div>
+  <div id="emptyCartMessage" class="hidden text-center mt-12 p-10 bg-white rounded-2xl shadow-xl border border-gray-200">
+    <p class="text-3xl text-gray-500 font-light">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 inline-block align-middle mr-2 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        Your itinerary is currently empty.
+    </p>
+    <p class="text-lg text-gray-500 mt-2">Go back to the list and start adding amazing places!</p>
+    </div>
+
+  <!-- SUMMARY SECTION: Consolidated Spacing -->
+  <div id="cartSummary" class="mt-10 pt-6 border-t border-gray-300 flex flex-col gap-2 hidden bg-white p-6 rounded-2xl shadow-2xl">
+    
+    <!-- Top Row: Total and Clear Itinerary -->
+    <div class="flex justify-between items-center">
+      <p class="text-2xl font-extrabold text-gray-900">Total Places: <span id="totalItems" class="text-teal-600">0</span></p>
+      <button onclick="clearCart()" class="bg-red-600 text-white px-6 py-3 rounded-xl hover:bg-red-700 font-bold shadow-lg transition-transform hover:scale-[1.02]">
+        Clear Itinerary
+      </button>
+    </div>
+    
+    <!-- Bottom Row: Schedule and Map (Right aligned, Royal Blue) -->
+    <div class="flex justify-end gap-3">
+      <button onclick="alert('Viewing suggested schedule...')" class="bg-blue-800 text-white px-6 py-3 rounded-xl hover:bg-blue-700 font-bold shadow-xl transition-transform hover:scale-[1.02] flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+        View Schedule
+      </button>
+      <button onclick="alert('Generating optimized map...')" class="bg-blue-800 text-white px-6 py-3 rounded-xl hover:bg-blue-700 font-bold shadow-xl transition-transform hover:scale-[1.02] flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+        Generate Map
+      </button>
+    </div>
+  </div>
+</main>
+
+<script>
+  // IMPORTANT: Using custom alert/confirm to avoid iframe issues.
+  function alert(message) {
+    console.log("Alert (simulated): " + message);
+    const existingNotification = document.getElementById('notification-box');
+    if (existingNotification) existingNotification.remove();
+
+    const notification = document.createElement('div');
+    notification.id = 'notification-box';
+    notification.className = 'fixed top-4 right-4 bg-teal-600 text-white p-4 rounded-lg shadow-xl z-50 transition-transform transform duration-300';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.classList.add('translate-x-full');
+      notification.addEventListener('transitionend', () => notification.remove());
+    }, 2000);
+  }
+  
+  function confirm(message) {
+    return window.confirm(message); // Fallback for simple demo, though custom UI is preferred
+  }
+
+
+  function renderCart() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const cartItemsContainer = document.getElementById('cartItems');
+    const emptyMessage = document.getElementById('emptyCartMessage');
+    const cartSummary = document.getElementById('cartSummary');
+    const totalItemsSpan = document.getElementById('totalItems');
+
+    cartItemsContainer.innerHTML = ''; // Clear previous content
+
+    if (cart.length === 0) {
+      emptyMessage.classList.remove('hidden');
+      cartSummary.classList.add('hidden');
+      return;
+    }
+
+    emptyMessage.classList.add('hidden');
+    cartSummary.classList.remove('hidden');
+    totalItemsSpan.textContent = cart.length;
+
+    cart.forEach(item => {
+      const itemElement = document.createElement('div');
+      
+      // Visual appeal: bg-white with shadow and border
+      itemElement.className = 'flex items-center bg-white p-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-200';
+      
+      // Determine if it has a banner image or a generic icon
+      const isImage = item.icon && (item.icon.endsWith('.jpg') || item.icon.endsWith('.png') || item.icon.endsWith('.jpeg'));
+
+      // Image/Icon size is w-10 h-10 (40x40px). **No margin-right used here.**
+      const imageOrIconHTML = isImage ? 
+        `<img src="${item.icon}" alt="${item.name}" class="w-10 h-10 object-cover rounded-lg border border-gray-200 shadow-sm" />` :
+        `<span class="text-2xl w-10 h-10 flex items-center justify-center bg-gray-100 text-teal-600 rounded-lg shadow-sm">${item.icon || '📍'}</span>`;
+
+
+      itemElement.innerHTML = `
+        ${imageOrIconHTML}
+        
+        <!-- Content area: Name/Origin + Category Pill aligned horizontally and centered vertically -->
+        <!-- Removed ml-1 from this div to bring content closer to the icon/image -->
+        <div class="flex-grow flex items-center justify-between pr-4">
+          <!-- Name and Origin in uniform bold text size -->
+          <h3 class="text-base font-bold text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis mr-4">
+            ${item.name}, Chennai 
+          </h3>
+          
+          <!-- Category pill, centered in remaining space -->
+          <span class="text-xs font-semibold px-3 py-1 rounded-full bg-teal-100 text-teal-700 min-w-[70px] text-center">${item.category}</span>
+        </div>
+        
+        <!-- Remove button with adjusted padding for better vertical centering -->
+        <button onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}')" class="bg-red-80 text-red-700 px-3 py-1.3 rounded-lg text-sm font-semibold hover:bg-red-130 ml-6 transition-colors shadow-sm">
+          Remove
+        </button>
+      `;
+      cartItemsContainer.appendChild(itemElement);
+    });
+  }
+
+  function removeFromCart(nameToRemove) {
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart = cart.filter(item => item.name !== nameToRemove);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCart(); // Re-render the cart after removal
+    alert(nameToRemove + " removed from itinerary.");
+  }
+
+  function clearCart() {
+    if (confirm("Are you sure you want to clear your entire itinerary?")) {
+      localStorage.removeItem('cart');
+      renderCart();
+      alert("Itinerary cleared!");
+    }
+  }
+
+  window.onload = renderCart;
+</script>
+</body>
+</html>
