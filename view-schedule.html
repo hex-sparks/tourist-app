@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trip Scheduler with Day-wise Places</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* Styles same as before */
+  .form-check-card {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .form-check-card:hover {
+    background: #d1fae5;
+    border-color: #34d399;
+  }
+  .form-check-card input[type="checkbox"] {
+    margin-right: 10px;
+  }
+</style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-teal-50 via-green-50 to-emerald-50 p-6">
+
+<header class="bg-white sticky top-0 shadow p-4 mb-8">
+  <div class="max-w-xl mx-auto flex justify-between items-center">
+    <button onclick="window.location.href='cart.html'" class="text-gray-700 hover:text-teal-700 flex items-center space-x-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Back to Cart</span>
+    </button>
+    <h1 class="text-2xl font-bold text-teal-700">Trip Scheduler</h1>
+    <div></div>
+  </div>
+</header>
+
+<main class="max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6 space-y-8">
+
+<section id="tripDetails">
+  <h2 class="text-xl font-bold mb-4">Step 1: Trip Details</h2>
+  <form id="tripForm" class="space-y-4">
+    <label class="block">
+      <span class="text-gray-700 font-semibold">Trip Start Date</span>
+      <input type="date" name="tripDate" required class="mt-1 block w-full border border-gray-300 p-2 rounded"/>
+    </label>
+    <label class="block">
+      <span class="text-gray-700 font-semibold">Trip Duration (Days)</span>
+      <input type="number" name="tripDays" min="1" max="10" required placeholder="Enter number of days" class="mt-1 block w-full border border-gray-300 p-2 rounded"/>
+    </label>
+    <fieldset class="mt-4">
+      <legend class="font-semibold mb-2">Travel Origin</legend>
+      <label class="inline-flex items-center mr-6">
+        <input type="radio" name="travelType" value="indian" required>
+        <span class="ml-2">Domestic (India)</span>
+      </label>
+      <label class="inline-flex items-center">
+        <input type="radio" name="travelType" value="non-indian" required>
+        <span class="ml-2">International</span>
+      </label>
+    </fieldset>
+    <div id="indianDetails" class="hidden mt-4">
+      <label>
+        <span class="text-gray-700 font-semibold">District</span>
+        <select name="district" class="mt-1 block w-full border border-gray-300 p-2 rounded">
+          <option>Chennai</option>
+          <option>Delhi</option>
+          <option>Mumbai</option>
+          <!-- Add more districts -->
+        </select>
+      </label>
+    </div>
+    <div id="internationalDetails" class="hidden mt-4">
+      <label>
+        <span class="text-gray-700 font-semibold">City of Arrival in India</span>
+        <input type="text" name="arrivalCity" placeholder="e.g. Delhi" class="mt-1 block w-full border border-gray-300 p-2 rounded"/>
+      </label>
+    </div>
+    <button type="submit" class="w-full bg-teal-600 text-white py-2 rounded mt-6 font-semibold">Next: Choose Places</button>
+  </form>
+</section>
+
+<section id="choosePlaces" class="hidden">
+  <h2 class="text-xl font-bold mb-4">Step 2: Choose Places per Day</h2>
+
+  <form id="placesForm">
+    <div>
+      <h3 class="font-semibold mb-2">Day 1 Places</h3>
+      <div id="day1Places" class="space-y-3 mb-6 border border-gray-200 p-4 rounded"></div>
+    </div>
+    <div>
+      <h3 class="font-semibold mb-2">Day 2+ Places</h3>
+      <div id="day2Places" class="space-y-3 border border-gray-200 p-4 rounded"></div>
+    </div>
+
+    <button type="submit" class="mt-6 w-full bg-teal-600 text-white py-2 rounded font-semibold">Generate Schedule</button>
+  </form>
+</section>
+
+<section id="scheduleOutput" class="hidden">
+  <h2 class="text-xl font-bold mb-4">Generated Itinerary</h2>
+  <div id="itineraryResult" class="space-y-4 rounded p-4 bg-white shadow"></div>
+</section>
+
+<script>
+// DOM Elements
+const tripForm = document.getElementById('tripForm');
+const choosePlaces = document.getElementById('choosePlaces');
+const day1Container = document.getElementById('day1Places');
+const day2Container = document.getElementById('day2Places');
+const scheduleOutput = document.getElementById('scheduleOutput');
+const itineraryResult = document.getElementById('itineraryResult');
+const tripDetails = document.getElementById('tripDetails');
+
+const indianRadio = tripForm.querySelector('input[value="indian"]');
+const nonIndianRadio = tripForm.querySelector('input[value="non-indian"]');
+const indianDetails = document.getElementById('indianDetails');
+const internationalDetails = document.getElementById('internationalDetails');
+
+function toggleFields() {
+  if (indianRadio.checked) {
+    indianDetails.classList.remove('hidden');
+    internationalDetails.classList.add('hidden');
+    indianDetails.querySelector('select').setAttribute('required', 'true');
+    internationalDetails.querySelector('input').removeAttribute('required');
+  } else if (nonIndianRadio.checked) {
+    internationalDetails.classList.remove('hidden');
+    indianDetails.classList.add('hidden');
+    internationalDetails.querySelector('input').setAttribute('required', 'true');
+    indianDetails.querySelector('select').removeAttribute('required');
+  } else {
+    indianDetails.classList.add('hidden');
+    internationalDetails.classList.add('hidden');
+    indianDetails.querySelector('select').removeAttribute('required');
+    internationalDetails.querySelector('input').removeAttribute('required');
+  }
+}
+
+indianRadio.addEventListener('change', toggleFields);
+nonIndianRadio.addEventListener('change', toggleFields);
+
+function loadCartPlaces() {
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  if (!cart.length) {
+    day1Container.innerHTML = "<p class='text-gray-500'>Your cart is empty.</p>";
+    day2Container.innerHTML = "";
+    return;
+  }
+  
+  day1Container.innerHTML = '';
+  day2Container.innerHTML = '';
+  cart.forEach((place, idx) => {
+    const placeCheckbox1 = document.createElement('label');
+    placeCheckbox1.className = "flex items-center space-x-2 cursor-pointer";
+    placeCheckbox1.innerHTML = `<input type="checkbox" name="day1" value="${place.name}" class="form-checkbox"/> ${place.name}`;
+    
+    const placeCheckbox2 = document.createElement('label');
+    placeCheckbox2.className = "flex items-center space-x-2 cursor-pointer";
+    placeCheckbox2.innerHTML = `<input type="checkbox" name="day2" value="${place.name}" class="form-checkbox"/> ${place.name}`;
+    
+    day1Container.appendChild(placeCheckbox1);
+    day2Container.appendChild(placeCheckbox2);
+  });
+}
+
+tripForm.addEventListener('submit', e => {
+  e.preventDefault();
+  // Basic validation done by browser
+  
+  tripDetails.style.display = 'none';
+  choosePlaces.classList.remove('hidden');
+  loadCartPlaces();
+});
+
+document.getElementById('placesForm').addEventListener('submit', e => {
+  e.preventDefault();
+  
+  const selectedDay1 = [...document.querySelectorAll('input[name="day1"]:checked')].map(el => el.value);
+  const selectedDay2 = [...document.querySelectorAll('input[name="day2"]:checked')].map(el => el.value);
+  
+  if (!selectedDay1.length && !selectedDay2.length) {
+    alert("Select at least one place for Day 1 or Day 2.");
+    return;
+  }
+  
+  const tripDate = tripForm.tripDate.value;
+  const tripDays = tripForm.tripDays.value;
+  const travelType = tripForm.travelType.value;
+  const origin = travelType === "indian" ? tripForm.district.value : tripForm.arrivalCity.value;
+  
+  let itineraryText = `<p>Trip Start Date: <strong>${tripDate}</strong></p>`;
+  itineraryText += `<p>Trip Duration: <strong>${tripDays} day(s)</strong></p>`;
+  itineraryText += `<p>Travel Origin: <strong>${travelType.toUpperCase()}</strong>, ${origin}</p>`;
+  
+  itineraryText += "<h3 class='mt-4 font-semibold'>Day 1 Visits</h3>";
+  if(selectedDay1.length){
+    itineraryText += "<ul class='list-disc pl-4'>" + selectedDay1.map(place => `<li>${place}</li>`).join('') + "</ul>";
+  }else{
+    itineraryText += "<p>None selected</p>";
+  }
+  
+  itineraryText += "<h3 class='mt-4 font-semibold'>Day 2 Visits</h3>";
+  if(selectedDay2.length){
+    itineraryText += "<ul class='list-disc pl-4'>" + selectedDay2.map(place => `<li>${place}</li>`).join('') + "</ul>";
+  }else{
+    itineraryText += "<p>None selected</p>";
+  }
+  
+  scheduleOutput.classList.remove('hidden');
+  document.getElementById('choosePlaces').style.display = 'none';
+  itineraryResult.innerHTML = itineraryText;
+});
+</script>
